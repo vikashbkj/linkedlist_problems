@@ -13,22 +13,35 @@ class LinkedListTest<T> {
 
     internal fun display() {
         println("Displaying linked list")
+//        if (size == 0) {
+        if (head == null) {
+            println("List is empty")
+            return
+        }
 
         var temp = head
         while (temp != null) {
             print(temp)
             temp = temp.next
         }
+        println()
     }
 
-    internal fun insertAtBeginning(value: T) {
+/*    internal fun insertAtBeginning(value: T) {
         val node = ListNode(value)
+        node.next = head
+        head = node
+        size++
+    }*/
+
+    internal fun insertAtFirst(value: T) {
+      val node = ListNode(value)
         node.next = head
         head = node
         size++
     }
 
-    internal fun getPreviousNodeOfIndex(index: Int): ListNode<T>? {
+ /*   internal fun getNodeAtIndex(index: Int): ListNode<T>? {
         if (index < 0) {
             throw IndexOutOfBoundsException("Index &$index is negative")
         }
@@ -42,15 +55,42 @@ class LinkedListTest<T> {
             counter++
         }
         return temp
+    }*/
+
+    internal fun getPreviousNodeOfIndex(index: Int): ListNode<T>? {
+        if (index < 0) {
+            throw IndexOutOfBoundsException("Negative index $index is passed")
+        }
+        if (index > size) {
+            throw IndexOutOfBoundsException("Index $index passed is more than size $size. Hence it is not reachable.")
+        }
+        var temp = head
+        var counter = 0
+        while (counter < index-1) {
+            temp = temp?.next
+            counter++
+        }
+        return temp
     }
 
-    internal fun insertAtEnd(value: T) {
+ /*   internal fun insertAtEnd(value: T) {
         if (size == 0) {
-            insertAtBeginning(value)
+            insertAtFirst(value)
             return
         }
         val node = ListNode(value)
-        val previous = getPreviousNodeOfIndex(lastIndex)
+        val previous = getNodeAtIndex(lastIndex)
+        previous?.next = node
+        size++
+    }*/
+
+    internal fun insertAtEnd(value: T) {
+        if (size == 0) { // if the list is empty lastIndex = -1
+            insertAtFirst(value)
+            return
+        }
+        val previous = getPreviousNodeOfIndex(size)
+        val node = ListNode(value)
         previous?.next = node
         size++
     }
@@ -60,24 +100,58 @@ class LinkedListTest<T> {
      * That is why validations should be handles inside insertAtIndex() functions rather than relying on
      * validation from getPreviousNodeOfIndex() function
      */
-    internal fun insertAtIndex(index: Int, value: T) {
+/*    internal fun insertAtIndex(index: Int, value: T) {
         if (index < 0 || index > size) {
             throw IndexOutOfBoundsException("Invalid index $index")
         }
         if (index == 0) {
-            insertAtBeginning(value)
+            insertAtFirst(value)
             return
         }
         if (index == size) {
             insertAtEnd(value)
             return
         }
-        val previous = getPreviousNodeOfIndex(index-1)
+        val previous = getNodeAtIndex(index - 1)
         val current = previous?.next
         val node = ListNode(value)
         previous?.next = node
         node.next = current
         size++
-    }
+    }*/
 
+    /**
+     * A function should always be responsible for validating its own inputs.
+     * That is why validations should be handles inside insertAtIndex() functions rather than relying on
+     * validation from getPreviousNodeOfIndex() function
+     */
+    internal fun insertAtIndex(index: Int, value: T) {
+       if (index < 0) {
+           throw IndexOutOfBoundsException("Negative index $index is passed")
+       }
+        /**
+         * while inserting, user can always insert at size i.e. lastIndex + 1.
+         * Because element at size index needs to be referenced by node.next at lastIndex
+         * and node at lastIndex is easily accessible by calling getNodeAtIndex(lastIndex)
+         */
+
+        if (index > size) {
+            throw IndexOutOfBoundsException("Index $index passed is more than size $size. Hence it is not reachable.")
+        }
+        if (index == 0) {
+            insertAtFirst(value)
+            return
+        }
+        if (index == size) {
+            insertAtEnd(value)
+            return
+        }
+        val previous = getPreviousNodeOfIndex(index)
+        val current = previous?.next
+
+        val node = ListNode(value)
+        previous?.next = node
+        node.next = current
+        size++
+    }
 }
