@@ -4,8 +4,21 @@ fun main() {
     val list = LinkedListTest<Int>()
 
 //    insertItemsAtBeginning(list)
-    insertItemsAtEnd(list)
+//    insertItemsAtEnd(list)
+
+    insertItemsAtIndex(list)
     list.display()
+}
+
+fun insertItemsAtIndex(list: LinkedListTest<Int>) {
+    list.insertAtIndex(0, 10)
+    list.insertAtIndex(0, 20)
+//    list.insertAtIndex(1, 17)
+//    list.insertAtIndex(list.lastIndex, 30)
+    list.insertAtIndex(0, 40)
+    list.insertAtIndex(2, 50)
+    list.insertAtIndex(1, 17)
+    list.insertAtIndex(list.size, 100)
 }
 
 fun insertItemsAtBeginning(list: LinkedListTest<Int>) {
