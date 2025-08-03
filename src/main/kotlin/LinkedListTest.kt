@@ -1,15 +1,16 @@
 package org.example
 
-data class ListNode<T>(val value: T, var next: ListNode<T>? = null) {
-    override fun toString(): String {
-        return " $value "
-    }
-}
 
 class LinkedListTest<T> {
+
+    inner class ListNode<T>(val value: T, var next: ListNode<T>? = null) {
+        override fun toString(): String {
+            return " $value "
+        }
+    }
+
     var head: ListNode<T>? = null
     var size: Int = 0
-    val lastIndex get() = size - 1
 
     internal fun display() {
         println("Displaying linked list")
@@ -28,7 +29,7 @@ class LinkedListTest<T> {
     }
 
     internal fun insertAtFirst(value: T) {
-      val node = ListNode(value)
+        val node = ListNode(value)
         node.next = head
         head = node
         size++
@@ -43,7 +44,7 @@ class LinkedListTest<T> {
         }
         var temp = head
         var counter = 0
-        while (counter < index-1) {
+        while (counter < index - 1) {
             temp = temp?.next
             counter++
         }
@@ -67,9 +68,9 @@ class LinkedListTest<T> {
      * validation from getPreviousNodeOfIndex() function
      */
     internal fun insertAtIndex(index: Int, value: T) {
-       if (index < 0) {
-           throw IndexOutOfBoundsException("Negative index $index is passed")
-       }
+        if (index < 0) {
+            throw IndexOutOfBoundsException("Negative index $index is passed")
+        }
         /**
          * while inserting, user can always insert at size i.e. lastIndex + 1.
          * Because element at size index needs to be referenced by node.next at lastIndex
@@ -94,5 +95,27 @@ class LinkedListTest<T> {
         previous?.next = node
         node.next = current
         size++
+    }
+
+    internal fun deleteAtFirst(): ListNode<T>? {
+        val temp = head
+        head = head?.next
+        size--
+        return temp
+    }
+
+    internal fun deleteAtLast(): ListNode<T>? {
+        if (size == 1) {
+            val temp = head
+            head = null
+            size--
+            return temp
+        }
+        if (size == 0) return null
+        val previous = getPreviousNodeOfIndex(size - 1)
+        val current = previous?.next
+        previous?.next = null
+        size--
+        return current
     }
 }

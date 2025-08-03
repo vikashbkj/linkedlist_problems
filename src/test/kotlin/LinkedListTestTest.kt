@@ -22,7 +22,6 @@ class LinkedListTestTest {
     fun `new list should be empty`() {
         assertEquals(0, list.size)
         assertNull(list.head)
-        assertEquals(-1, list.lastIndex)
     }
 
     @Nested
@@ -36,7 +35,6 @@ class LinkedListTestTest {
             assertNotNull(list.head)
             assertEquals(10, list.head?.value)
             assertNull(list.head?.next)
-            assertEquals(0, list.lastIndex)
         }
 
         @Test
@@ -47,7 +45,6 @@ class LinkedListTestTest {
             assertEquals(2, list.size)
             assertEquals(20, list.head?.value)
             assertEquals(10, list.head?.next?.value)
-            assertEquals(1, list.lastIndex)
         }
     }
 
@@ -60,7 +57,6 @@ class LinkedListTestTest {
 
             assertEquals(1, list.size)
             assertEquals(10, list.head?.value)
-            assertEquals(0, list.lastIndex)
         }
 
         @Test
@@ -72,7 +68,6 @@ class LinkedListTestTest {
             assertEquals(10, list.head?.value)
             assertEquals(20, list.head?.next?.value)
             assertNull(list.head?.next?.next)
-            assertEquals(1, list.lastIndex)
         }
     }
 
