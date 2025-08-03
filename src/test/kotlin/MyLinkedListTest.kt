@@ -2,6 +2,8 @@ import org.example.MyLinkedList
 import org.example.Node
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
@@ -193,5 +195,69 @@ class MyLinkedListTest {
     fun `node toString should format correctly`() {
         val node = Node(100)
         assertEquals(" 100 ", node.toString())
+    }
+
+    @Nested
+    @DisplayName("reverseLinkedList()")
+    inner class ReverseLinkedList {
+
+        @Test
+        fun `reversing an empty list should do nothing`() {
+            // Act
+            list.reverseLinkedList()
+
+            // Assert
+            assertEquals(0, list.size)
+            assertNull(list.deleteAtFirst(), "List should remain empty")
+        }
+
+        @Test
+        fun `reversing a single-element list should not change the list`() {
+            // Arrange
+            list.insertAtFirst(10)
+
+            // Act
+            list.reverseLinkedList()
+
+            // Assert
+            assertEquals(1, list.size)
+            val node = list.deleteAtFirst()
+            assertEquals(10, node?.value)
+            assertTrue(list.isEmpty(), "List should be empty after deleting the only element")
+        }
+        @Test
+        fun `reversing a two-element list should swap the elements`() {
+            // Arrange
+            list.insertAtLast(10)
+            list.insertAtLast(20) // List: 10 -> 20
+
+            // Act
+            list.reverseLinkedList() // List should be: 20 -> 10
+
+            // Assert
+            assertEquals(2, list.size)
+            assertEquals(20, list.deleteAtFirst()?.value, "New head should be 20")
+            assertEquals(10, list.deleteAtFirst()?.value, "New tail should be 10")
+        }
+
+        @Test
+        fun `reversing a multi-element list should reverse the order completely`() {
+            // Arrange
+            list.insertAtLast(10)
+            list.insertAtLast(20)
+            list.insertAtLast(30)
+            list.insertAtLast(40) // List: 10 -> 20 -> 30 -> 40
+
+            // Act
+            list.reverseLinkedList() // List should be: 40 -> 30 -> 20 -> 10
+
+            // Assert
+            assertEquals(4, list.size)
+            assertEquals(40, list.deleteAtFirst()?.value)
+            assertEquals(30, list.deleteAtFirst()?.value)
+            assertEquals(20, list.deleteAtFirst()?.value)
+            assertEquals(10, list.deleteAtFirst()?.value)
+            assertTrue(list.isEmpty())
+        }
     }
 }

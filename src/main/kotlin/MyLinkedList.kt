@@ -12,6 +12,10 @@ class MyLinkedList<T> {
     private var tail: Node<T>? = null
     var size: Int = 0
 
+    internal fun isEmpty(): Boolean {
+        return this.size == 0
+    }
+
     internal fun display() {
         println("Displaying list................")
         if (size == 0) {
@@ -132,107 +136,89 @@ class MyLinkedList<T> {
         size--
         return temp
     }
-}
 
-fun main() {
-    val list = MyLinkedList<Int>()
+    /**
+     * It's efficient (O(n) time, O(1) space
+     */
+    internal fun reverseLinkedList() {
+        println("Reversing the linked list.....")
 
-//    insertItemsAtBeginning(list)
-//    insertItemsAtEnd(list)
-//    insertItemsAtIndex(list)
-
-//    deleteItemsAtBeginning(list)
-//    deleteItemsAtEnd(list)
-    deleteItemsAtIndex(list)
-}
-
-private fun insertItemsAtBeginning(list: MyLinkedList<Int>) {
-    println("Inserting items at beginning")
-
-    list.insertAtFirst(10)
-    list.insertAtFirst(20)
-    list.insertAtFirst(30)
-    list.insertAtFirst(40)
-    list.insertAtFirst(50)
-
-    println("insertItemsAtBeginning :: List size is :: ${list.size}")
-    list.display()
-}
-
-private fun insertItemsAtEnd(list: MyLinkedList<Int>) {
-    println("Inserting items at beginning")
-
-    list.insertAtLast(10)
-    list.insertAtLast(20)
-    list.insertAtLast(30)
-    list.insertAtLast(40)
-    list.insertAtLast(50)
-
-    println("insertItemsAtEnd :: List size is :: ${list.size}")
-    list.display()
-}
-
-private fun insertItemsAtIndex(list: MyLinkedList<Int>) {
-    println("Inserting items at index")
-
-    insertItemsAtBeginning(list)
-
-    list.insertAtIndex(1, 9)
-    list.insertAtIndex(1, 19)
-    list.insertAtIndex(0, 29)
-
-    println("insertItemsAtIndex :: List size is :: ${list.size}")
-    list.display()
-}
-
-
-private fun deleteItemsAtBeginning(list: MyLinkedList<Int>) {
-    println("Deleting items at beginning")
-
-    insertItemsAtIndex(list)
-
-    val deletedNode1 = list.deleteAtFirst()
-    println("Deleted deletedNode1 :: $deletedNode1")
-
-    while (list.size > 0) {
-        val deletedNode = list.deleteAtFirst()
-        println("Deleted Node :: $deletedNode")
+        var previous: Node<T>? = null
+        var current = head
+        while (current != null) {
+            val nextNode = current.next
+            current.next = previous
+            previous = current
+            current = nextNode
+        }
+        val tempHead = head
+        head = previous
+        tail = tempHead
     }
-    list.display()
-}
 
-private fun deleteItemsAtEnd(list: MyLinkedList<Int>) {
-    println("Deleting items at end")
+    /**
+     * Rotate linked list left by k elements
+     *  Time complexity of O(k), which is the best possible for this operation.
+     *  The space complexity is O(1) as it uses only a few variables for pointers.
+      */
+    internal fun rotateLeftBy(key: Int) {
+        if (size < 2) {
+            return
+        }
+        val mKey = key % size
+        if (mKey == 0) {
+            return
+        }
 
-    insertItemsAtIndex(list)
-
-    val deletedNode1 = list.deleteAtLast()
-    println("Deleted deletedNode1 :: $deletedNode1")
-
-    while (list.size > 0) {
-        val deletedNode = list.deleteAtLast()
-        println("Deleted Node :: $deletedNode")
+        val originalHead = head
+        var previous: Node<T>? = null
+        var current = head
+        var counter = 0
+        while (counter < mKey) {
+            val nextNode = current?.next
+            previous = current
+            current = nextNode
+            counter++
+        }
+        previous?.next = null
+        head = current
+        tail?.next = originalHead
+        tail = previous
     }
-    list.display()
-}
 
-private fun deleteItemsAtIndex(list: MyLinkedList<Int>) {
-    println("Deleting items at index")
+    /**
+     * Rotate linked list right by k elements
+     */
+    internal fun rotateRightBy(key: Int) {
+        if (size < 2) {
+            return
+        }
+        val mKey = key % size
+        if (mKey == 0) {
+            return
+        }
+        val originalTail = tail
+        val previous = getPreviousNodeOfIndex(size-mKey)
+        val current = previous?.next
 
-    insertItemsAtIndex(list)
+        previous?.next = null
+        tail = previous
 
-    val deletedNodeAtIndex_0 = list.deleteAtIndex(0)
-    println("Deleted deletedNodeAtIndex_0 :: $deletedNodeAtIndex_0")
+        originalTail?.next = head
+        head = current
+    }
 
-    list.display()
-
-    val deletedNodeAtIndex_1 = list.deleteAtIndex(1)
-    println("Deleted deletedNodeAtIndex_1 :: $deletedNodeAtIndex_1")
-
-    list.display()
-
-    val deletedNodeAtIndex_LAST_INDEX = list.deleteAtIndex(list.size-1)
-    println("Deleted deletedNodeAtIndex_1 :: $deletedNodeAtIndex_LAST_INDEX")
-
-    list.display()
+    /**
+     * a right rotation by k is mathematically identical to a left rotation by n - k.
+     */
+    internal fun rotateRightBySecond(key : Int) {
+        if (size < 2) {
+            return
+        }
+        val mKey = key % size
+        if (mKey == 0) {
+            return
+        }
+        rotateLeftBy(size-mKey)
+    }
 }
